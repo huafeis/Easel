@@ -377,9 +377,9 @@ def test_write_baseline_profile(tmp_path, monkeypatch):
     names = {f.name for f in pd.iterdir()}
     assert names == {"identity.md", "style.md", "audience.md",
                      "platforms.md", "preferences.md", "memory.md"}
-    assert "平价护肤测评" in (pd / "identity.md").read_text()
-    assert "不接医疗功效" in (pd / "preferences.md").read_text()
-    assert "小红书" in (pd / "platforms.md").read_text()
+    assert "平价护肤测评" in (pd / "identity.md").read_text(encoding="utf-8")
+    assert "不接医疗功效" in (pd / "preferences.md").read_text(encoding="utf-8")
+    assert "小红书" in (pd / "platforms.md").read_text(encoding="utf-8")
 
 
 # ---- Web: _persona_prefix ----
@@ -407,7 +407,7 @@ def test_persona_gate_low_score_warns_but_never_blocks_publish():
 
 
 def test_persona_skill_prioritizes_positioning_and_caps_cross_niche_scores():
-    skill = (PROJECT_ROOT / "skills/openclaw/skill-persona-check/SKILL.md").read_text()
+    skill = (PROJECT_ROOT / "skills/openclaw/skill-persona-check/SKILL.md").read_text(encoding="utf-8")
     assert "账号定位与内容赛道" in skill and "| 30% |" in skill
     assert "内容形式一致性" in skill and "目标受众匹配" in skill
     assert "总分最高 59" in skill
@@ -456,7 +456,7 @@ def test_job_events_resume_after_event_id(tmp_path, monkeypatch):
         {"id": 3, "event": "token", "data": "后"},
         {"id": 4, "event": "done", "data": {"sessionKey": "s"}},
     ]
-    path.write_text("\n".join(json.dumps(e, ensure_ascii=False) for e in events) + "\n")
+    path.write_text("\n".join(json.dumps(e, ensure_ascii=False) for e in events) + "\n", encoding="utf-8")
 
     resumed = web._read_job_events("turn-a", after=2)
     assert [event["id"] for event in resumed] == [3, 4]
